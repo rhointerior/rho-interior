@@ -20,7 +20,7 @@ exports.handler = async (event) => {
   <div style="max-width:560px;margin:0 auto;background:#F4EFE6;">
     <div style="border:1px solid #C8A860;padding:32px 36px;">
       <div style="text-align:center;border:1px solid #C8A860;padding:16px;margin-bottom:28px;">
-        <span style="font-size:28px;color:#C8A860;font-style:italic;">&#961;</span>
+        <span style="font-size:32px;color:#C8A860;font-family:Georgia,serif;font-style:italic;line-height:1;">ρ</span>
       </div>
       <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
       <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Dear ${name},</p>
