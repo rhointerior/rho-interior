@@ -11,12 +11,26 @@ exports.handler = async (event) => {
     host: 'smtp-relay.brevo.com',
     port: 587,
     auth: {
-      user: 'design@rhointerior.com',
+      user: process.env.BREVO_SMTP_USER,
       pass: process.env.BREVO_SMTP_KEY
     }
   });
 
-  const confirmationHtml = `<div style="background:#F4EFE6;padding:40px 20px;font-family:Georgia,serif;"><div style="max-width:560px;margin:0 auto;"><div style="border:1px solid #C8A860;padding:32px 36px;"><div style="text-align:center;border:1px solid #C8A860;padding:16px;margin-bottom:28px;"><span style="font-size:28px;color:#C8A860;font-style:italic;">&#961;</span></div><div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div><p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Dear ${name},</p><p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Thank you for your interest in <em>rho interior</em>. We are delighted to have you on our list and will be in touch as soon as our website launches.</p><p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 24px;">Until then, we look forward to welcoming you into a world of considered design.</p><div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div><p style="font-size:13px;color:#8C7B5E;margin:0;text-align:center;font-style:italic;">rho interior</p></div></div></div>`;
+  const confirmationHtml = `<div style="background:#F4EFE6;padding:40px 20px;font-family:Georgia,serif;">
+  <div style="max-width:560px;margin:0 auto;background:#F4EFE6;">
+    <div style="border:1px solid #C8A860;padding:32px 36px;">
+      <div style="text-align:center;border:1px solid #C8A860;padding:16px;margin-bottom:28px;">
+        <span style="font-size:28px;color:#C8A860;font-style:italic;">&#961;</span>
+      </div>
+      <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
+      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Dear ${name},</p>
+      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Thank you for your interest in <em>rho interior</em>. We are delighted to have you on our list and will be in touch as soon as our website launches.</p>
+      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 24px;">Until then, we look forward to welcoming you into a world of considered design.</p>
+      <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
+      <p style="font-size:13px;color:#8C7B5E;margin:0;text-align:center;font-style:italic;">rho interior</p>
+    </div>
+  </div>
+</div>`;
 
   await transporter.sendMail({
     from: '"rho interior" <design@rhointerior.com>',
