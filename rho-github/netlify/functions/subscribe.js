@@ -18,54 +18,44 @@ function brevoPost(payload) {
     const req = https.request(options, res => {
       let data = '';
       res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        console.log('Brevo status:', res.statusCode);
-        console.log('Brevo response:', data);
-        resolve({ status: res.statusCode, body: data });
-      });
+      res.on('end', () => resolve({ status: res.statusCode, body: data }));
     });
-    req.on('error', e => {
-      console.error('Brevo error:', e.message);
-      reject(e);
-    });
+    req.on('error', e => reject(e));
     req.write(body);
     req.end();
   });
 }
 
 exports.handler = async (event) => {
-  console.log('Function called, method:', event.httpMethod);
-  console.log('Body:', event.body);
-
   const params = new URLSearchParams(event.body);
   const name = params.get('name') || 'Friend';
   const email = params.get('email');
 
-  console.log('Parsed name:', name, 'email:', email);
+  if (!email) return { statusCode: 400, body: 'Missing email' };
 
-  if (!email) {
-    return { statusCode: 400, body: 'Missing email' };
-  }
+  const confirmationHtml = `<div style="background:#F4EFE6;padding:40px 20px;font-family:Georgia,serif;">
+  <div style="max-width:560px;margin:0 auto;background:#F4EFE6;">
+    <div style="border:1px solid #C8A860;padding:32px 36px;">
+      <div style="text-align:center;border:1px solid #C8A860;padding:16px;margin-bottom:28px;">
+        <span style="font-size:28px;color:#C8A860;font-style:italic;">&#961;</span>
+      </div>
+      <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
+      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Dear ${name},</p>
+      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Thank you for your interest in <em>rho interior</em>. We are delighted to have you on our list and will be in touch as soon as our website launches.</p>
+      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 24px;">Until then, we look forward to welcoming you into a world of considered design.</p>
+      <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
+      <p style="font-size:13px;color:#8C7B5E;margin:0;text-align:center;font-style:italic;">rho interior</p>
+    </div>
+  </div>
+</div>`;
 
-  try {
-    const r1 = await brevoPost({
-      sender: { name: 'rho interior', email: 'design@rhointerior.com' },
-      to: [{ email, name }],
-      subject: "You're on the list",
-      htmlContent: '<p>Thank you for signing up.</p>'
-    });
-    console.log('Confirmation email result:', r1.status, r1.body);
+  await brevoPost({
+    sender: { name: 'rho interior', email: 'design@rhointerior.com' },
+    to: [{ email, name }],
+    subject: "You're on the list",
+    htmlContent: confirmationHtml
+  });
 
-    const r2 = await brevoPost({
-      sender: { name: 'rho interior', email: 'design@rhointerior.com' },
-      to: [{ email: 'design@rhointerior.com' }],
-      subject: 'New sign-up: ' + name,
-      htmlContent: '<p>New sign-up: ' + name + ' (' + email + ')</p>'
-    });
-    console.log('Notification email result:', r2.status, r2.body);
-  } catch(e) {
-    console.error('Error:', e.message);
-  }
-
-  return { statusCode: 200, body: 'ok' };
-};
+  await brevoPost({
+    sender: { name: 'rho interior', email: 'design@rhointerior.com' },
+    to: [{ email:
