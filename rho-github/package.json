@@ -1,0 +1,7 @@
+{
+  "name": "rho-interior",
+  "private": true,
+  "dependencies": {
+    "nodemailer": "^10.1.0"
+  }
+}
