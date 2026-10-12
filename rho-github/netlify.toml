@@ -1,4 +1,4 @@
 [build]
   base = "rho-github"
-  publish = "rho-github"
-  functions = "rho-github/netlify/functions"
+  publish = "."
+  functions = "netlify/functions"
