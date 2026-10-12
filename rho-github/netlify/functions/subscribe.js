@@ -1,4 +1,3 @@
-const https = require('https');
 const nodemailer = require('nodemailer');
 
 exports.handler = async (event) => {
@@ -13,7 +12,7 @@ exports.handler = async (event) => {
     port: 587,
     auth: {
       user: 'design@rhointerior.com',
-      pass: 'xsmtpsib-cc9b42237e120059de2bb5d82d57143a5194abe6e2d681947898530b03888eea-nhNumG0c4luGHsWv'
+      pass: process.env.BREVO_SMTP_KEY
     }
   });
 
