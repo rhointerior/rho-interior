@@ -16,11 +16,11 @@ exports.handler = async (event) => {
     }
   });
 
-  const confirmationHtml = `<div style="background:#F4EFE6;padding:40px 20px;font-family:Georgia,serif;">
+  const confirmationHtml = `<div style="background:#F4EFE6;padding:40px 20px;font-family:Georgia,serif;color-scheme:light;">
   <div style="max-width:560px;margin:0 auto;background:#F4EFE6;">
     <div style="border:1px solid #C8A860;padding:32px 36px;">
       <div style="text-align:center;border:1px solid #C8A860;padding:16px;margin-bottom:28px;">
-        <span style="font-size:32px;color:#C8A860;font-family:Georgia,serif;font-style:italic;line-height:1;">ρ</span>
+        <img src="https://rhointerior.com/rho-mark.png" width="40" height="48" alt="rho" style="display:inline-block;width:40px;height:48px;" />
       </div>
       <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
       <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Dear ${name},</p>
