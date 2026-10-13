@@ -37,7 +37,7 @@ exports.handler = async (event) => {
   <div style="max-width:560px;margin:0 auto;background:#F4EFE6;">
     <div style="border:1px solid #C8A860;padding:32px 36px;">
       <div style="text-align:center;border:1px solid #C8A860;padding:16px;margin-bottom:28px;">
-        <img src="https://rhointerior.com/rho-mark.png" width="44" height="63" alt="rho interior" style="display:inline-block;" />
+        <img src="https://rhointerior.com/rho-final.png" width="44" height="63" alt="rho interior" style="display:inline-block;" />
       </div>
       <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
       <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Dear ${name},</p>
