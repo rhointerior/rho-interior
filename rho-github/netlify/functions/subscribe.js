@@ -2,12 +2,12 @@ const https = require('https');
 
 const API_KEY = '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';
 
-function brevoPost(payload) {
+function brevoPost(path, payload) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify(payload);
     const options = {
       hostname: 'api.brevo.com',
-      path: '/v3/smtp/email',
+      path,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,18 +49,28 @@ exports.handler = async (event) => {
   </div>
 </div>`;
 
-  await brevoPost({
+  // Send confirmation to subscriber
+  await brevoPost('/v3/smtp/email', {
     sender: { name: 'rho interior', email: 'design@rhointerior.com' },
     to: [{ email, name }],
-    subject: "You're on the list",
+    subject: "You're on the list! 🎉",
     htmlContent: confirmationHtml
   });
 
-  await brevoPost({
+  // Notify design@rhointerior.com
+  await brevoPost('/v3/smtp/email', {
     sender: { name: 'rho interior', email: 'design@rhointerior.com' },
     to: [{ email: 'design@rhointerior.com' }],
     subject: 'New sign-up: ' + name,
     htmlContent: '<p>New sign-up: <strong>' + name + '</strong> (' + email + ')</p>'
+  });
+
+  // Save contact to Brevo list (list ID 2 — change if needed)
+  await brevoPost('/v3/contacts', {
+    email,
+    attributes: { FIRSTNAME: name },
+    listIds: [2],
+    updateEnabled: true
   });
 
   return { statusCode: 200, body: 'ok' };
