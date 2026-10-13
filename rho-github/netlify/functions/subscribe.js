@@ -1,6 +1,6 @@
 const https = require('https');
 
-const API_KEY = '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';
+const API_KEY = process.env.BREVO_API_KEY;
 
 function brevoPost(path, payload) {
   return new Promise((resolve, reject) => {
@@ -30,7 +30,6 @@ exports.handler = async (event) => {
   const params = new URLSearchParams(event.body);
   const name = params.get('name') || 'Friend';
   const email = params.get('email');
-
   if (!email) return { statusCode: 400, body: 'Missing email' };
 
   const confirmationHtml = `<div style="background:#F4EFE6;padding:40px 20px;font-family:Georgia,serif;">
@@ -49,7 +48,6 @@ exports.handler = async (event) => {
   </div>
 </div>`;
 
-  // Send confirmation to subscriber
   await brevoPost('/v3/smtp/email', {
     sender: { name: 'rho interior', email: 'design@rhointerior.com' },
     to: [{ email, name }],
@@ -57,7 +55,6 @@ exports.handler = async (event) => {
     htmlContent: confirmationHtml
   });
 
-  // Notify design@rhointerior.com
   await brevoPost('/v3/smtp/email', {
     sender: { name: 'rho interior', email: 'design@rhointerior.com' },
     to: [{ email: 'design@rhointerior.com' }],
@@ -65,7 +62,6 @@ exports.handler = async (event) => {
     htmlContent: '<p>New sign-up: <strong>' + name + '</strong> (' + email + ')</p>'
   });
 
-  // Save contact to Brevo list (list ID 2 — change if needed)
   await brevoPost('/v3/contacts', {
     email,
     attributes: { FIRSTNAME: name },
