@@ -17,6 +17,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
+  --g: clamp(100px, 13vw, 165px);
   --bg:     #1A0E08;
   --ink:    #F0E0CC;
   --brass:  #C87848;
@@ -56,18 +57,18 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
   filter: drop-shadow(0 2px 40px rgba(200,120,72,.25));
 }
 #glyph-bounce img {
-  height: clamp(100px, 13vw, 165px);
+  height: var(--g);
   width: auto;
   display: block;
 }
 
 /* ── TEXT BLOCK — sits below the settled glyph ── */
 #text-block {
-  position: fixed; left: 50%; transform: translateX(-50%);
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%);
   display: flex; flex-direction: column; align-items: center;
   z-index: 3; pointer-events: none;
-  /* top set by JS after glyph size is known */
 }
+#glyph-slot { height: var(--g); width: 1px; margin-bottom: 20px; }
 
 .rule-wrap { width: clamp(140px, 22vw, 260px); height: 1px; overflow: hidden; opacity: 0; }
 .rule-line  { height: 1px; background: linear-gradient(90deg, transparent, var(--gilt), transparent); transform: translateX(-100%); }
@@ -96,14 +97,13 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
 .contact-link:hover { color: var(--ink); border-color: var(--ink); }
 
 /* ── BOTTOM DOMAIN ── */
-.domain { color: var(--ink); text-decoration: none; transition: color .3s ease; position: fixed; bottom: 44px; right: 44px; font-size: 8px; font-weight: 200; letter-spacing: .44em; text-transform: lowercase; white-space: nowrap; z-index: 3; opacity: 0; }
+#foot { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 3; }
+.domain { color: var(--ink); text-decoration: none; transition: color .3s ease; font-size: 10px; font-weight: 300; letter-spacing: .4em; text-transform: lowercase; white-space: nowrap; opacity: 0; padding-left: .4em; }
 
 .domain:hover { color: var(--brass); }
 
 /* ── FOLIOS ── */
-.folio-bl, .folio-br { position: fixed; bottom: 44px; font-size: 7px; font-weight: 300; letter-spacing: .3em; z-index: 3; opacity: 0; }
-.folio-bl { left: 44px; }
-.folio-br { right: 44px; }
+.folio-bl { font-size: 7px; font-weight: 300; letter-spacing: .3em; opacity: 0; padding-left: .3em; }
 
 /* ── CONTACT OVERLAY ── */
 #contact-overlay {
@@ -175,21 +175,16 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
 /* ── KEYFRAMES ── */
 @keyframes rulePulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
 @keyframes gentleFloat {
-  0%   { transform: translateY(0px) rotate(0deg); }
-  30%  { transform: translateY(-14px) rotate(1.5deg); }
-  60%  { transform: translateY(-6px) rotate(-1deg); }
-  80%  { transform: translateY(-18px) rotate(2deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  50%     { transform: translateY(-4px) rotate(.6deg); }
+}
 }
 
 /* ── MOBILE ── */
 @media (max-width: 480px) {
   .border-inset { inset: 16px; }
   .wordmark { top: 22px; } .wordmark img { width: 130px; }
-  .domain { bottom: 28px; right: 20px; }
-  .folio-bl, .folio-br { bottom: 28px; }
-  .folio-bl { left: 20px; }
-  .folio-br { right: 20px; }
+  #foot { bottom: 26px; }
   .contact-close { top: 28px; right: 24px; }
 }
 </style>
@@ -203,14 +198,14 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
 <div id="glyph-bounce"><img src="rho-logomark.svg" alt="rho" /></div>
 
 <div id="text-block">
+  <div id="glyph-slot"></div>
   <div class="rule-wrap" id="rule-wrap"><div class="rule-line" id="rule-line"></div></div>
   <div class="tagline" id="tagline">the measure of a room</div>
   <div class="coming-soon" id="coming">coming soon</div>
   <div class="contact-link" id="contact-btn">start here</div>
 </div>
 
-<a class="domain" id="domain" href="mailto:design@rhointerior.com">design@rhointerior.com</a>
-<div class="folio-bl" id="fl">Lagos · Nigeria</div>
+<div class="foot" id="foot"><a class="domain" id="domain" href="mailto:design@rhointerior.com">design@rhointerior.com</a><div class="folio-bl" id="fl">Lagos · Nigeria</div></div>
 
 <!-- Contact overlay -->
 <div id="contact-overlay">
@@ -293,15 +288,11 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
 
   // ── Where glyph settles: upper-center, text block below ──
   // Settled glyph top = (H/2) - glyphH * 0.7  (slightly above center)
+  const slot = document.getElementById('glyph-slot');
   function settledX() { return W/2 - glyphW/2; }
-  function settledY() { return H/2 - glyphH * 0.72; }
+  function settledY() { const r = slot.getBoundingClientRect(); return r.top + r.height/2 - glyphH/2; }
 
-  function positionTextBlock() {
-    getGlyphSize();
-    // Text sits just below the glyph's settled baseline
-    const top = settledY() + glyphH + 26;
-    tb.style.top = top + 'px';
-  }
+  function positionTextBlock() { getGlyphSize(); }
 
   // ── SWIRL ──
   const SWIRL_DURATION = 1800;
@@ -373,13 +364,14 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
 
   // ── BOUNCE ──
   let bx, by, vx, vy, rot = 0, rotSpeed = 0;
-  let bouncing = false, settling = false, settleStart = null, bounceBegin = null;
-  const BOUNCE_DURATION = 6000;
+  let sx=0, sy=0, sr=0, settledDone = false, bouncing = false, settling = false, settleStart = null, bounceBegin = null;
+  const SETTLE_MS = 3600;
+  const BOUNCE_DURATION = 11000;
 
   function startBounce() {
     getGlyphSize();
     bx = settledX(); by = settledY();
-    const speed = 0.9 + Math.random() * 0.4;
+    const speed = 0.7 + Math.random() * 0.3;
     const angle = Math.PI * (.15 + Math.random() * .35);
     vx = Math.cos(angle) * speed * (Math.random()>.5?1:-1);
     vy = -Math.sin(angle) * speed;
@@ -394,27 +386,28 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
     getGlyphSize();
 
     const elapsed = ts - bounceBegin;
-    if (elapsed > BOUNCE_DURATION && !settling) { settling = true; settleStart = ts; }
+    if (elapsed > BOUNCE_DURATION && !settling) {
+      settling = true; settleStart = ts; sx = bx; sy = by;
+      sr = rot % 360; if (sr > 180) sr -= 360; if (sr < -180) sr += 360;
+    }
 
     if (settling) {
-      const sp = Math.min((ts - settleStart) / 2400, 1);
-      const ease = 1 - Math.pow(1-sp, 3);
+      const sp = Math.min((ts - settleStart) / SETTLE_MS, 1);
+      const ease = sp < .5 ? 4*sp*sp*sp : 1 - Math.pow(-2*sp + 2, 3)/2;
       const tx = settledX(), ty = settledY();
-
-      // Pull toward target each frame
-      bx += (tx - bx) * 0.035;
-      by += (ty - by) * 0.035;
-      rot *= 0.96; rotSpeed *= 0.96;
+      bx = sx + (tx - sx) * ease;
+      by = sy + (ty - sy) * ease;
+      const r = sr * (1 - ease);
 
       glyph.style.left      = bx + 'px';
       glyph.style.top       = by + 'px';
-      glyph.style.transform = `rotate(${rot}deg)`;
+      glyph.style.transform = `rotate(${r}deg)`;
       glyph.style.opacity   = '1';
 
-      if (Math.abs(bx-tx)<0.5 && Math.abs(by-ty)<0.5 && Math.abs(rot)<0.05) {
+      if (sp >= 1) {
         glyph.style.left = tx + 'px'; glyph.style.top = ty + 'px';
         glyph.style.transform = 'rotate(0deg)';
-        bouncing = false;
+        bouncing = false; settledDone = true;
         startFloat();
         return;
       }
@@ -452,7 +445,7 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
   setTimeout(boot, 100);
 
   // Reposition on resize
-  window.addEventListener('resize', () => { if (!bouncing) positionTextBlock(); });
+  window.addEventListener('resize', () => { getGlyphSize(); if (settledDone) { glyph.style.left = settledX()+'px'; glyph.style.top = settledY()+'px'; } });
 })();
 
 /* ═══════════════════════════
