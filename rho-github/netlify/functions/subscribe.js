@@ -41,9 +41,9 @@ exports.handler = async (event) => {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#1A0E08" style="background-color:#1A0E08;">
 <tr><td align="center" bgcolor="#1A0E08" style="background-color:#1A0E08;padding:40px 16px;">
   <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" bgcolor="#1A0E08" style="width:100%;max-width:560px;background-color:#1A0E08;border:1px solid #C87848;">
-    <tr><td align="center" bgcolor="#1A0E08" style="background-color:#1A0E08;padding:44px 36px 8px;">
-      <img src="https://rhointerior.com/rho-email-logo-name.png" width="200" alt="rho interior" style="display:block;border:0;margin:0 auto;" />
-      <div style="font-family:Georgia,serif;font-size:10px;letter-spacing:6px;text-transform:uppercase;color:#C9B9A5;margin-top:12px;padding-left:6px;">interior</div>
+    <tr><td align="center" bgcolor="#1A0E08" style="background-color:#1A0E08;padding:36px 36px 4px;">
+      <img src="https://rhointerior.com/rho-email-logo-name.png" width="130" alt="rho interior" style="display:block;border:0;margin:0 auto;" />
+      <div style="font-family:Georgia,serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:#C9B9A5;margin-top:8px;padding-left:6px;">interior</div>
     </td></tr>
     <tr><td bgcolor="#1A0E08" style="background-color:#1A0E08;padding:24px 36px 0;"><div style="border-top:1px solid #C87848;font-size:0;line-height:0;">&nbsp;</div></td></tr>
     <tr><td bgcolor="#1A0E08" style="background-color:#1A0E08;padding:28px 40px 0;">
