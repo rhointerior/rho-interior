@@ -32,20 +32,32 @@ exports.handler = async (event) => {
   const email = params.get('email');
   if (!email) return { statusCode: 400, body: 'Missing email' };
 
-  const confirmationHtml = `<div style="background:#F4EFE6;padding:40px 20px;font-family:Georgia,serif;">
-  <div style="max-width:560px;margin:0 auto;background:#F4EFE6;">
-    <div style="border:1px solid #C8A860;padding:32px 36px;">
-      <div style="text-align:center;border:1px solid #C8A860;padding:16px;margin-bottom:28px;">
-        <img src="https://rhointerior.com/rho-final.png" width="44" height="63" alt="rho interior" style="display:inline-block;" />
-      </div>
-      <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
-      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Dear ${name},</p>
-      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 16px;">Thank you for your interest in <em>rho interior</em>. We are delighted to have you on our list and will be in touch as soon as our website launches.</p>
-      <p style="font-size:15px;color:#2C2C2C;line-height:1.7;margin:0 0 24px;">Until then, we look forward to welcoming you into a world of considered design.</p>
-      <div style="border-top:1px solid #C8A860;margin-bottom:24px;"></div>
-      <p style="font-size:13px;color:#8C7B5E;margin:0;text-align:center;font-style:italic;">rho interior</p>
-    </div>
-  </div>
+  const esc = v => String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const safeName = esc(name);
+
+  const confirmationHtml = `<div style="background:#1A0E08;padding:40px 16px;font-family:'Cormorant Garamond',Georgia,serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:#1A0E08;border:1px solid #C87848;">
+    <tr><td style="padding:44px 36px 8px;text-align:center;">
+      <img src="https://rhointerior.com/rho-email-logo-name.png" width="200" alt="rho interior" style="display:inline-block;border:0;" />
+      <div style="font-size:10px;letter-spacing:6px;text-transform:uppercase;color:#F0E0CC;opacity:.7;margin-top:12px;padding-left:6px;">interior</div>
+    </td></tr>
+    <tr><td style="padding:24px 36px 0;"><div style="border-top:1px solid #C87848;"></div></td></tr>
+    <tr><td style="padding:28px 40px 0;">
+      <p style="font-family:Georgia,serif;font-size:15px;color:#F0E0CC;line-height:1.8;margin:0 0 16px;">Dear ${safeName},</p>
+      <p style="font-family:Georgia,serif;font-size:15px;color:#F0E0CC;line-height:1.8;margin:0 0 16px;">Thank you for your interest in <em>rho interior</em>. We are delighted to have you on our list and will be in touch as soon as our website launches.</p>
+      <p style="font-family:Georgia,serif;font-size:15px;color:#F0E0CC;line-height:1.8;margin:0;">Until then, we look forward to welcoming you into a world of considered design.</p>
+    </td></tr>
+    <tr><td style="padding:36px 36px 0;text-align:center;">
+      <img src="https://rhointerior.com/rho-email-logomark.png" width="44" alt="rho" style="display:inline-block;border:0;" />
+    </td></tr>
+    <tr><td style="padding:24px 36px 0;"><div style="border-top:1px solid #C87848;"></div></td></tr>
+    <tr><td style="padding:20px 36px 36px;text-align:center;font-family:Georgia,serif;font-size:12px;letter-spacing:1px;color:#F0E0CC;">
+      <a href="mailto:design@rhointerior.com" style="color:#C87848;text-decoration:none;">design@rhointerior.com</a>
+      <span style="color:#C87848;"> &nbsp;·&nbsp; </span>
+      <a href="https://rhointerior.com" style="color:#C87848;text-decoration:none;">rhointerior.com</a>
+      <div style="margin-top:8px;font-style:italic;color:#F0E0CC;opacity:.7;">Lagos · Nigeria</div>
+    </td></tr>
+  </table>
 </div>`;
 
   await brevoPost('/v3/smtp/email', {
@@ -59,7 +71,7 @@ exports.handler = async (event) => {
     sender: { name: 'rho interior', email: 'design@rhointerior.com' },
     to: [{ email: 'design@rhointerior.com' }],
     subject: 'New sign-up: ' + name,
-    htmlContent: '<p>New sign-up: <strong>' + name + '</strong> (' + email + ')</p>'
+    htmlContent: '<p>New sign-up: <strong>' + safeName + '</strong> (' + esc(email) + ')</p>'
   });
 
   await brevoPost('/v3/contacts', {
