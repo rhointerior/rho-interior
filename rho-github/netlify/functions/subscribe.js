@@ -33,7 +33,7 @@ exports.handler = async (event) => {
 
   // Logo images hosted on Netlify — externally referenced so Gmail renders them
   const BASE = 'https://scintillating-stardust-2f35e7.netlify.app';
-  const wordmarkImg = `<img src="${BASE}/rho-email-wordmark.png" width="220" height="139" alt="rho" style="display:block;border:0;">`;
+  const wordmarkImg = `<img src="${BASE}/rho-email-wordmark.png" width="174" height="86" alt="rho" style="display:block;border:0;">`;
   const logomarkImg = `<img src="${BASE}/rho-email-logomark-parchment.png" width="62" height="83" alt="rho" style="display:block;border:0;">`;
 
   const confirmationHtml = `<!DOCTYPE html>
