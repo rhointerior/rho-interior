@@ -55,7 +55,7 @@ exports.handler = async (event) => {
           <td align="center" style="padding:48px 40px 36px;">
             <table role="presentation" cellpadding="0" cellspacing="0">
               <tr>
-                <td align="center" style="padding-bottom:2px;">
+                <td align="center" style="padding-bottom:12px;">
                   ${wordmarkImg}
                 </td>
               </tr>
