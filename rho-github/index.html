@@ -36,7 +36,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --g: clamp(100px, 13vw, 165px);
+  --g: clamp(80px, 11vw, 140px);
   --bg:     #1A0E08;
   --ink:    #F0E0CC;
   --brass:  #C87848;
@@ -58,7 +58,7 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
 
 /* ── WORDMARK ── */
 .wordmark {
-  position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
+  position: fixed; top: 44px; left: 50%; transform: translateX(-50%);
   text-align: center; z-index: 3; opacity: 0;
 }
 .wordmark img { width: clamp(150px, 15vw, 200px); height: auto; display: block; margin: 0 auto; }
@@ -87,7 +87,7 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
   display: flex; flex-direction: column; align-items: center;
   z-index: 3; pointer-events: none;
 }
-#glyph-slot { height: var(--g); width: 1px; margin-bottom: 20px; }
+#glyph-slot { height: var(--g); width: 1px; margin-bottom: 36px; }
 
 .rule-wrap { width: clamp(140px, 22vw, 260px); height: 1px; overflow: hidden; opacity: 0; }
 .rule-line  { height: 1px; background: linear-gradient(90deg, transparent, var(--gilt), transparent); transform: translateX(-100%); }
@@ -95,20 +95,20 @@ html, body { width: 100%; height: 100%; background: var(--bg); color: var(--ink)
 .tagline {
   font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400;
   font-size: clamp(20px, 2.8vw, 30px); letter-spacing: .1em; text-align: center;
-  color: var(--ink); opacity: 0; margin-top: 16px;
+  color: var(--ink); opacity: 0; margin-top: 24px;
   
 }
 
 .coming-soon {
   font-size: 13px; font-weight: 400; letter-spacing: .6em; text-transform: uppercase;
-  color: var(--gilt); opacity: 0; margin-top: 22px;
+  color: var(--gilt); opacity: 0; margin-top: 28px;
   text-shadow: 0 0 30px rgba(200,120,72,.35);
 }
 
 /* ── CONTACT LINK ── */
 .contact-link {
   font-size: 9px; font-weight: 300; letter-spacing: .5em; text-transform: uppercase;
-  color: var(--brass); opacity: 0; margin-top: 28px;
+  color: var(--brass); opacity: 0; margin-top: 36px;
   cursor: pointer; pointer-events: all;
   border-bottom: .5px solid var(--brass); padding-bottom: 3px;
   transition: color .3s ease, border-color .3s ease;
